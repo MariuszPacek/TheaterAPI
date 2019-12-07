@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/07/2019 16:17:54
+-- Date Created: 12/07/2019 20:27:12
 -- Generated from EDMX file: C:\Users\Mariusz\source\repos\MariuszPacek\TheaterAPI\Theater\Database\TheaterDataModel.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,50 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_DramaAuthor_Drama]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DramaAuthor] DROP CONSTRAINT [FK_DramaAuthor_Drama];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DramaAuthor_Author]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[DramaAuthor] DROP CONSTRAINT [FK_DramaAuthor_Author];
+GO
+IF OBJECT_ID(N'[dbo].[FK_DramaScene]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SceneSet] DROP CONSTRAINT [FK_DramaScene];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScenePerson]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PersonSet] DROP CONSTRAINT [FK_ScenePerson];
+GO
+IF OBJECT_ID(N'[dbo].[FK_SceneSituation]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[SituationSet] DROP CONSTRAINT [FK_SceneSituation];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ScenePlace]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PlaceSet] DROP CONSTRAINT [FK_ScenePlace];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[DramaSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DramaSet];
+GO
+IF OBJECT_ID(N'[dbo].[AuthorSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[AuthorSet];
+GO
+IF OBJECT_ID(N'[dbo].[SceneSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SceneSet];
+GO
+IF OBJECT_ID(N'[dbo].[PersonSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PersonSet];
+GO
+IF OBJECT_ID(N'[dbo].[SituationSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[SituationSet];
+GO
+IF OBJECT_ID(N'[dbo].[PlaceSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PlaceSet];
+GO
+IF OBJECT_ID(N'[dbo].[DramaAuthor]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[DramaAuthor];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -36,7 +75,10 @@ GO
 
 -- Creating table 'AuthorSet'
 CREATE TABLE [dbo].[AuthorSet] (
-    [Id] int IDENTITY(1,1) NOT NULL
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [FirstName] nvarchar(max)  NOT NULL,
+    [LastName] nvarchar(max)  NOT NULL,
+    [BioLink] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -45,7 +87,9 @@ CREATE TABLE [dbo].[SceneSet] (
     [Id] int IDENTITY(1,1) NOT NULL,
     [DramaId] int  NOT NULL,
     [Title] nvarchar(max)  NOT NULL,
-    [Number] nvarchar(max)  NOT NULL
+    [Number] nvarchar(max)  NOT NULL,
+    [Text] nvarchar(max)  NOT NULL,
+    [ShortDescription] nvarchar(max)  NOT NULL
 );
 GO
 

@@ -27,6 +27,7 @@ namespace Database
         public string Title { get; set; }
         public string Number { get; set; }
         public string Text { get; set; }
+        public string ShortDescription { get; set; }
     
         public virtual Drama Drama { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
