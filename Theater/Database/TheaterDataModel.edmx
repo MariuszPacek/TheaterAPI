@@ -13,7 +13,151 @@
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="TheaterDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="TheaterDataModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DramaSet" EntityType="TheaterDataModel.Drama" />
+          <EntitySet Name="AuthorSet" EntityType="TheaterDataModel.Author" />
+          <EntitySet Name="SceneSet" EntityType="TheaterDataModel.Scene" />
+          <AssociationSet Name="DramaAuthor" Association="TheaterDataModel.DramaAuthor">
+            <End Role="Drama" EntitySet="DramaSet" />
+            <End Role="Author" EntitySet="AuthorSet" />
+          </AssociationSet>
+          <AssociationSet Name="DramaScene" Association="TheaterDataModel.DramaScene">
+            <End Role="Drama" EntitySet="DramaSet" />
+            <End Role="Scene" EntitySet="SceneSet" />
+          </AssociationSet>
+          <EntitySet Name="PersonSet" EntityType="TheaterDataModel.Person" />
+          <AssociationSet Name="ScenePerson" Association="TheaterDataModel.ScenePerson">
+            <End Role="Scene" EntitySet="SceneSet" />
+            <End Role="Person" EntitySet="PersonSet" />
+          </AssociationSet>
+          <EntitySet Name="SituationSet" EntityType="TheaterDataModel.Situation" />
+          <EntitySet Name="PlaceSet" EntityType="TheaterDataModel.Place" />
+          <AssociationSet Name="SceneSituation" Association="TheaterDataModel.SceneSituation">
+            <End Role="Scene" EntitySet="SceneSet" />
+            <End Role="Situation" EntitySet="SituationSet" />
+          </AssociationSet>
+          <AssociationSet Name="ScenePlace" Association="TheaterDataModel.ScenePlace">
+            <End Role="Scene" EntitySet="SceneSet" />
+            <End Role="Place" EntitySet="PlaceSet" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Drama">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <NavigationProperty Name="Author" Relationship="TheaterDataModel.DramaAuthor" FromRole="Drama" ToRole="Author" />
+          <NavigationProperty Name="Scene" Relationship="TheaterDataModel.DramaScene" FromRole="Drama" ToRole="Scene" />
+        </EntityType>
+        <EntityType Name="Author">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Drama" Relationship="TheaterDataModel.DramaAuthor" FromRole="Author" ToRole="Drama" />
+        </EntityType>
+        <EntityType Name="Scene">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Drama" Relationship="TheaterDataModel.DramaScene" FromRole="Scene" ToRole="Drama" />
+          <Property Name="DramaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="TheaterDataModel.ScenePerson" FromRole="Scene" ToRole="Person" />
+          <Property Name="Title" Type="String" Nullable="false" />
+          <Property Name="Number" Type="String" Nullable="false" />
+          <NavigationProperty Name="Situation" Relationship="TheaterDataModel.SceneSituation" FromRole="Scene" ToRole="Situation" />
+          <NavigationProperty Name="Place" Relationship="TheaterDataModel.ScenePlace" FromRole="Scene" ToRole="Place" />
+        </EntityType>
+        <Association Name="DramaAuthor">
+          <End Type="TheaterDataModel.Drama" Role="Drama" Multiplicity="*" />
+          <End Type="TheaterDataModel.Author" Role="Author" Multiplicity="*" />
+        </Association>
+        <Association Name="DramaScene">
+          <End Type="TheaterDataModel.Drama" Role="Drama" Multiplicity="1" />
+          <End Type="TheaterDataModel.Scene" Role="Scene" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Drama">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Scene">
+              <PropertyRef Name="DramaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Scene" Relationship="TheaterDataModel.ScenePerson" FromRole="Person" ToRole="Scene" />
+          <Property Name="SceneId" Type="Int32" Nullable="false" />
+          <Property Name="Gender" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="ScenePerson">
+          <End Type="TheaterDataModel.Scene" Role="Scene" Multiplicity="1" />
+          <End Type="TheaterDataModel.Person" Role="Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scene">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="SceneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="Age">
+          <Member Name="NewBorn" Value="2" />
+          <Member Name="Child" Value="10" />
+          <Member Name="Teenager" Value="20" />
+          <Member Name="YoungAdult" Value="40" />
+          <Member Name="Adult" Value="60" />
+          <Member Name="Old" Value="100" />
+        </EnumType>
+        <EntityType Name="Situation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Scene" Relationship="TheaterDataModel.SceneSituation" FromRole="Situation" ToRole="Scene" />
+          <Property Name="SceneId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Place">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Scene" Relationship="TheaterDataModel.ScenePlace" FromRole="Place" ToRole="Scene" />
+          <Property Name="SceneId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="SceneSituation">
+          <End Type="TheaterDataModel.Scene" Role="Scene" Multiplicity="1" />
+          <End Type="TheaterDataModel.Situation" Role="Situation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scene">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Situation">
+              <PropertyRef Name="SceneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ScenePlace">
+          <End Type="TheaterDataModel.Scene" Role="Scene" Multiplicity="1" />
+          <End Type="TheaterDataModel.Place" Role="Place" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Scene">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Place">
+              <PropertyRef Name="SceneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

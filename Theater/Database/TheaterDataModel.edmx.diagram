@@ -4,7 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0907ba21be5a48ab9777e1b89abf2173" Name="Diagram1" />
+      <Diagram DiagramId="0907ba21be5a48ab9777e1b89abf2173" Name="Diagram1" >
+        <EntityTypeShape EntityType="TheaterDataModel.Drama" Width="2.75" PointX="1.625" PointY="1.375" />
+        <EntityTypeShape EntityType="TheaterDataModel.Author" Width="1.5" PointX="5" PointY="1.375" />
+        <EntityTypeShape EntityType="TheaterDataModel.Scene" Width="1.5" PointX="1.625" PointY="4" />
+        <AssociationConnector Association="TheaterDataModel.DramaAuthor" />
+        <AssociationConnector Association="TheaterDataModel.DramaScene" />
+        <EntityTypeShape EntityType="TheaterDataModel.Person" Width="1.5" PointX="3.5" PointY="4" />
+        <AssociationConnector Association="TheaterDataModel.ScenePerson" />
+        <EntityTypeShape EntityType="TheaterDataModel.Situation" Width="1.5" PointX="1.25" PointY="7.125" />
+        <EntityTypeShape EntityType="TheaterDataModel.Place" Width="1.5" PointX="3" PointY="7.125" />
+        <AssociationConnector Association="TheaterDataModel.SceneSituation" />
+        <AssociationConnector Association="TheaterDataModel.ScenePlace" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
