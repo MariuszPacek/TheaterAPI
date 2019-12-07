@@ -4,11 +4,169 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="TheaterDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="TheaterDataModelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="TheaterDataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="TheaterDataModelStoreContainer">
+    <EntitySet Name="DramaSet" EntityType="TheaterDataModel.Store.DramaSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AuthorSet" EntityType="TheaterDataModel.Store.AuthorSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SceneSet" EntityType="TheaterDataModel.Store.SceneSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PersonSet" EntityType="TheaterDataModel.Store.PersonSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SituationSet" EntityType="TheaterDataModel.Store.SituationSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PlaceSet" EntityType="TheaterDataModel.Store.PlaceSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DramaAuthor" EntityType="TheaterDataModel.Store.DramaAuthor" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_DramaAuthor_Drama" Association="TheaterDataModel.Store.FK_DramaAuthor_Drama">
+      <End Role="Drama" EntitySet="DramaSet" />
+      <End Role="DramaAuthor" EntitySet="DramaAuthor" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DramaAuthor_Author" Association="TheaterDataModel.Store.FK_DramaAuthor_Author">
+      <End Role="Author" EntitySet="AuthorSet" />
+      <End Role="DramaAuthor" EntitySet="DramaAuthor" />
+    </AssociationSet>
+    <AssociationSet Name="DramaScene" Association="TheaterDataModel.Store.DramaScene">
+      <End Role="Drama" EntitySet="DramaSet" />
+      <End Role="Scene" EntitySet="SceneSet" />
+    </AssociationSet>
+    <AssociationSet Name="ScenePerson" Association="TheaterDataModel.Store.ScenePerson">
+      <End Role="Scene" EntitySet="SceneSet" />
+      <End Role="Person" EntitySet="PersonSet" />
+    </AssociationSet>
+    <AssociationSet Name="SceneSituation" Association="TheaterDataModel.Store.SceneSituation">
+      <End Role="Scene" EntitySet="SceneSet" />
+      <End Role="Situation" EntitySet="SituationSet" />
+    </AssociationSet>
+    <AssociationSet Name="ScenePlace" Association="TheaterDataModel.Store.ScenePlace">
+      <End Role="Scene" EntitySet="SceneSet" />
+      <End Role="Place" EntitySet="PlaceSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="DramaSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AuthorSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SceneSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DramaId" Type="int" Nullable="false" />
+    <Property Name="Title" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Number" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PersonSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SceneId" Type="int" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SituationSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="SceneId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PlaceSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SceneId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DramaAuthor">
+    <Key>
+      <PropertyRef Name="Drama_Id" />
+      <PropertyRef Name="Author_Id" />
+    </Key>
+    <Property Name="Drama_Id" Type="int" Nullable="false" />
+    <Property Name="Author_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="DramaScene">
+    <End Role="Drama" Type="TheaterDataModel.Store.DramaSet" Multiplicity="1" />
+    <End Role="Scene" Type="TheaterDataModel.Store.SceneSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Drama">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Scene">
+        <PropertyRef Name="DramaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ScenePerson">
+    <End Role="Scene" Type="TheaterDataModel.Store.SceneSet" Multiplicity="1" />
+    <End Role="Person" Type="TheaterDataModel.Store.PersonSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Scene">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Person">
+        <PropertyRef Name="SceneId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SceneSituation">
+    <End Role="Scene" Type="TheaterDataModel.Store.SceneSet" Multiplicity="1" />
+    <End Role="Situation" Type="TheaterDataModel.Store.SituationSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Scene">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Situation">
+        <PropertyRef Name="SceneId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ScenePlace">
+    <End Role="Scene" Type="TheaterDataModel.Store.SceneSet" Multiplicity="1" />
+    <End Role="Place" Type="TheaterDataModel.Store.PlaceSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Scene">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Place">
+        <PropertyRef Name="SceneId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DramaAuthor_Drama">
+    <End Role="Drama" Type="TheaterDataModel.Store.DramaSet" Multiplicity="1" />
+    <End Role="DramaAuthor" Type="TheaterDataModel.Store.DramaAuthor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Drama">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DramaAuthor">
+        <PropertyRef Name="Drama_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DramaAuthor_Author">
+    <End Role="DramaAuthor" Type="TheaterDataModel.Store.DramaAuthor" Multiplicity="*" />
+    <End Role="Author" Type="TheaterDataModel.Store.AuthorSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DramaAuthor">
+        <PropertyRef Name="Author_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="TheaterDataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -55,6 +213,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Drama" Relationship="TheaterDataModel.DramaAuthor" FromRole="Author" ToRole="Drama" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="BioLink" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Scene">
           <Key>
@@ -68,6 +229,7 @@
           <Property Name="Number" Type="String" Nullable="false" />
           <NavigationProperty Name="Situation" Relationship="TheaterDataModel.SceneSituation" FromRole="Scene" ToRole="Situation" />
           <NavigationProperty Name="Place" Relationship="TheaterDataModel.ScenePlace" FromRole="Scene" ToRole="Place" />
+          <Property Name="Text" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="DramaAuthor">
           <End Type="TheaterDataModel.Drama" Role="Drama" Multiplicity="*" />
@@ -162,13 +324,72 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="TheaterDataModel" />
-        <Alias Key="Target" Value="TheaterDataModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="TheaterDataModelContainer" StorageEntityContainer="TheaterDataModelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TheaterDataModelStoreContainer" CdmEntityContainer="TheaterDataModelContainer">
+    <EntitySetMapping Name="DramaSet">
+      <EntityTypeMapping TypeName="IsTypeOf(TheaterDataModel.Drama)">
+        <MappingFragment StoreEntitySet="DramaSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AuthorSet">
+      <EntityTypeMapping TypeName="IsTypeOf(TheaterDataModel.Author)">
+        <MappingFragment StoreEntitySet="AuthorSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SceneSet">
+      <EntityTypeMapping TypeName="IsTypeOf(TheaterDataModel.Scene)">
+        <MappingFragment StoreEntitySet="SceneSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DramaId" ColumnName="DramaId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Number" ColumnName="Number" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PersonSet">
+      <EntityTypeMapping TypeName="IsTypeOf(TheaterDataModel.Person)">
+        <MappingFragment StoreEntitySet="PersonSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SceneId" ColumnName="SceneId" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SituationSet">
+      <EntityTypeMapping TypeName="IsTypeOf(TheaterDataModel.Situation)">
+        <MappingFragment StoreEntitySet="SituationSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="SceneId" ColumnName="SceneId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlaceSet">
+      <EntityTypeMapping TypeName="IsTypeOf(TheaterDataModel.Place)">
+        <MappingFragment StoreEntitySet="PlaceSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="SceneId" ColumnName="SceneId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="DramaAuthor" TypeName="TheaterDataModel.DramaAuthor" StoreEntitySet="DramaAuthor">
+      <EndProperty Name="Drama">
+        <ScalarProperty Name="Id" ColumnName="Drama_Id" />
+      </EndProperty>
+      <EndProperty Name="Author">
+        <ScalarProperty Name="Id" ColumnName="Author_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -182,6 +403,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

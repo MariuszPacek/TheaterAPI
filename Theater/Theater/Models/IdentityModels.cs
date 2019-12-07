@@ -29,5 +29,17 @@ namespace Theater.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Database.Drama> Dramata { get; set; }
+
+        public System.Data.Entity.DbSet<Database.Author> Authors { get; set; }
+
+        public System.Data.Entity.DbSet<Database.Scene> Scenes { get; set; }
+
+        public System.Data.Entity.DbSet<Database.Person> People { get; set; }
+
+        public System.Data.Entity.DbSet<Database.Place> Places { get; set; }
+
+        public System.Data.Entity.DbSet<Database.Situation> Situations { get; set; }
     }
 }
